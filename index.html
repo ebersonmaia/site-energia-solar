@@ -3118,6 +3118,38 @@
       }
     }
 
+    /* ============ HERO — SMARTPHONE: 1ª dobra só com cabeçalho + vídeo; o conteúdo vai para a 2ª dobra ============ */
+    @media (max-width: 640px) {
+      .hero {
+        display: block;
+        min-height: 0;
+        padding: 0
+      }
+
+      /* vídeo, imagem de abertura e efeitos (névoa, ondas, linhas de luz) ocupam exatamente a 1ª tela */
+      .hbg {
+        inset: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        height: 100svh
+      }
+
+      /* sem texto sobre o vídeo: escurece só o topo (cabeçalho) e dissolve a base no fundo da próxima dobra */
+      .shade {
+        background: linear-gradient(to bottom, rgba(3, 3, 3, .6) 0%, rgba(3, 3, 3, 0) 22%, rgba(3, 3, 3, 0) 72%, var(--bg) 100%)
+      }
+
+      /* badge, H1, texto, botão, selos e painéis começam logo abaixo da 1ª tela */
+      .hero .hg {
+        margin-top: 100vh;
+        margin-top: 100svh;
+        padding-top: 104px; /* 80px do cabeçalho fixo + folga: ao rolar 1 tela, o badge aparece logo abaixo dele */
+        padding-bottom: 72px
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .pf, .waves i, .bars i {
         animation: none !important
@@ -3705,7 +3737,7 @@
       // Roda mesmo com "reduzir movimento" ativo no sistema (contar números não é movimento brusco).
       const DURATION = 3800; // ms — aumente para ficar mais lento
       counters.forEach(el => show(el, 0));
-      setTimeout(() => {
+      const runCounters = () => {
         meter.style.width = '89.7%';
         const t0 = performance.now();
         const tick = () => {
@@ -3715,7 +3747,15 @@
           if (k < 1) requestAnimationFrame(tick);
         };
         tick();
-      }, 900);
+      };
+      if (matchMedia('(max-width: 640px)').matches) {
+        // smartphone: o conteúdo do hero fica na 2ª dobra — os números começam quando ele entra na tela
+        new IntersectionObserver((es, o) => {
+          if (es.some(e => e.isIntersecting)) { o.disconnect(); setTimeout(runCounters, 250); }
+        }, { threshold: .25 }).observe(hero.querySelector('.hg'));
+      } else {
+        setTimeout(runCounters, 900);
+      }
     })();
 
     (function () {
@@ -3748,6 +3788,8 @@
       const wrap = document.getElementById('vwrap');
       const mobileMQ = matchMedia('(max-width: 767px)');
       const pinMQ = matchMedia('(min-width: 1024px) and (min-height: 640px)');
+      const smallMQ = matchMedia('(max-width: 640px)');
+      const heroBg = document.querySelector('.hbg');
       const INTRO_MS = 2000;
       const VIDEOS = {
         mobile: { id: '1249014376', ar: 9 / 16, title: 'Video Mobile 01' },
@@ -3761,7 +3803,10 @@
       // Pinned (desktop): progresso ao longo da altura extra do track; mobile: ao longo do hero.
       const progress = () => {
         const top = track.getBoundingClientRect().top;
-        const dist = pinMQ.matches ? track.offsetHeight - innerHeight : track.offsetHeight;
+        // smartphone: o vídeo ocupa só a 1ª dobra, então ele percorre o vídeo inteiro durante essa primeira tela de rolagem
+        const dist = pinMQ.matches ? track.offsetHeight - innerHeight
+          : smallMQ.matches ? heroBg.offsetHeight
+          : track.offsetHeight;
         return Math.min(Math.max(-top / Math.max(dist, 1), 0), 1);
       };
 
@@ -3831,6 +3876,7 @@
       addEventListener('scroll', onScroll, { passive: true });
       addEventListener('resize', onScroll);
       pinMQ.addEventListener('change', onScroll);
+      smallMQ.addEventListener('change', onScroll);
       mount(mobileMQ.matches ? 'mobile' : 'desktop');
     })();
 
