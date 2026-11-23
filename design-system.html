@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Velora — Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.0.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --bg: #030303;
+      --bg2: #050505;
+      --surf: #0a0a0a;
+      --surf2: #111;
+      --acc: #f59e0b;
+      --neon: #fbbf24;
+      --bs: rgba(255, 255, 255, .05);
+      --b: rgba(255, 255, 255, .1);
+      --bst: rgba(255, 255, 255, .2);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font: 300 16px/1.6 'Inter', sans-serif;
+      background: var(--bg);
+      color: #e2e8f0;
+      overflow-x: hidden
+    }
+
+    ::selection {
+      background: rgba(255, 255, 255, .2);
+      color: #fff
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 10px
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    .top {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 80px;
+      z-index: 50;
+      background: rgba(3, 3, 3, .6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--bs)
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: auto;
+      padding: 0 24px
+    }
+
+    .top .wrap {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -.025em;
+      color: #fff
+    }
+
+    .links {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .5);
+      overflow-x: auto;
+      white-space: nowrap
+    }
+
+    .links a:hover {
+      color: #fff
+    }
+
+    .links a {
+      transition: color .3s
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 9999px;
+      font: 500 12px 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .3s;
+      border: 1px solid transparent
+    }
+
+    .b-white {
+      padding: 10px 20px;
+      background: #fff;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255, 255, 255, .15)
+    }
+
+    .b-white:hover {
+      background: rgba(255, 255, 255, .9)
+    }
+
+    .b-acc {
+      padding: 16px 32px;
+      background: var(--acc);
+      color: #000;
+      font-weight: 600;
+      border-color: var(--acc);
+      box-shadow: 0 0 30px rgba(245, 158, 11, .3)
+    }
+
+    .b-acc:hover {
+      transform: scale(1.05)
+    }
+
+    .b-ghost {
+      padding: 16px 32px;
+      color: #fff;
+      border-color: rgba(245, 158, 11, .3);
+      background: rgba(245, 158, 11, .05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 15px rgba(245, 158, 11, .05)
+    }
+
+    .b-ghost:hover {
+      background: rgba(245, 158, 11, .1);
+      border-color: rgba(245, 158, 11, .5)
+    }
+
+    .b-soft {
+      padding: 12px 24px;
+      color: #fff;
+      background: rgba(255, 255, 255, .1)
+    }
+
+    .b-soft:hover {
+      background: rgba(255, 255, 255, .2)
+    }
+
+    .b-out {
+      padding: 12px 24px;
+      color: #fff;
+      background: transparent;
+      border-color: var(--bst)
+    }
+
+    .b-out:hover {
+      background: rgba(255, 255, 255, .1)
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0)
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(2deg)
+      }
+    }
+
+    @keyframes floatr {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0)
+      }
+
+      50% {
+        transform: translateY(20px) rotate(-2deg)
+      }
+    }
+
+    @keyframes wave {
+      0% {
+        transform: translateY(100%) scaleY(1);
+        opacity: 0
+      }
+
+      50% {
+        opacity: .5
+      }
+
+      100% {
+        transform: translateY(-100%) scaleY(1.5);
+        opacity: 0
+      }
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0
+      }
+
+      10% {
+        opacity: 1
+      }
+
+      90% {
+        opacity: 1
+      }
+
+      100% {
+        transform: translateY(-20vh) translateX(20px);
+        opacity: 0
+      }
+    }
+
+    @keyframes ping {
+      0% {
+        transform: scale(1);
+        opacity: .8
+      }
+
+      100% {
+        transform: scale(2.5);
+        opacity: 0
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes scan {
+      0% {
+        transform: translateX(-100%)
+      }
+
+      100% {
+        transform: translateX(200%)
+      }
+    }
+
+    @keyframes ripple {
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0
+      }
+    }
+
+    @keyframes bar1 {
+
+      0%,
+      100% {
+        height: 20%
+      }
+
+      50% {
+        height: 80%
+      }
+    }
+
+    @keyframes bar2 {
+
+      0%,
+      100% {
+        height: 50%
+      }
+
+      50% {
+        height: 90%
+      }
+    }
+
+    @keyframes bar3 {
+
+      0%,
+      100% {
+        height: 30%
+      }
+
+      50% {
+        height: 70%
+      }
+    }
+
+    @keyframes typing {
+      from {
+        width: 0
+      }
+
+      to {
+        width: 100%
+      }
+    }
+
+    @keyframes caret {
+
+      from,
+      to {
+        border-color: transparent
+      }
+
+      50% {
+        border-color: #f59e0b
+      }
+    }
+
+    @keyframes probe {
+
+      0%,
+      100% {
+        transform: translateY(-100%);
+        opacity: 0
+      }
+
+      50% {
+        opacity: 1
+      }
+
+      100% {
+        transform: translateY(200%);
+        opacity: 0
+      }
+    }
+
+    @keyframes eglow {
+
+      0%,
+      100% {
+        text-shadow: 0 0 20px rgba(245, 158, 11, .2)
+      }
+
+      50% {
+        text-shadow: 0 0 40px rgba(245, 158, 11, .4)
+      }
+    }
+
+    .b-acc,
+    .b-ghost {
+      position: relative;
+      overflow: hidden
+    }
+
+    .b-acc:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .4), transparent);
+      animation: scan 3s linear infinite;
+      pointer-events: none
+    }
+
+    .b-ghost:hover:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(245, 158, 11, .2) 0%, transparent 50%);
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple 1s ease-out forwards;
+      pointer-events: none
+    }
+
+    .hero {
+      position: relative;
+      min-height: 860px;
+      display: flex;
+      align-items: center;
+      padding: 128px 0 96px;
+      overflow: hidden
+    }
+
+    .hbg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden
+    }
+
+    .hbg>div {
+      position: absolute
+    }
+
+    .fog {
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(245, 158, 11, .08) 0%, transparent 60%);
+      filter: blur(80px)
+    }
+
+    .waves {
+      inset: 0;
+      opacity: .4
+    }
+
+    .waves i {
+      position: absolute;
+      height: 150%;
+      background: linear-gradient(to top, transparent, rgba(245, 158, 11, .1), transparent)
+    }
+
+    .parts {
+      inset: 0
+    }
+
+    .parts i {
+      position: absolute;
+      border-radius: 9999px;
+      background: linear-gradient(to top, transparent, #f59e0b)
+    }
+
+    .sing {
+      top: 50%;
+      right: 15%;
+      transform: translateY(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      border: 1px solid rgba(245, 158, 11, .2);
+      box-shadow: 0 0 120px rgba(245, 158, 11, .15), inset 0 0 80px rgba(245, 158, 11, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .sing>div {
+      position: absolute;
+      border-radius: 50%
+    }
+
+    .sing i {
+      position: absolute;
+      border-radius: 50%
+    }
+
+    .r1 {
+      width: 70%;
+      height: 70%;
+      border: 1px solid rgba(245, 158, 11, .3);
+      box-shadow: 0 0 60px rgba(245, 158, 11, .2);
+      animation: ping 5s cubic-bezier(0, 0, .2, 1) infinite
+    }
+
+    .r2 {
+      width: 50%;
+      height: 50%;
+      border: 1px solid rgba(245, 158, 11, .4);
+      box-shadow: 0 0 40px rgba(245, 158, 11, .3);
+      animation: ping 5s cubic-bezier(0, 0, .2, 1) 2.5s infinite
+    }
+
+    .o1 {
+      width: 90%;
+      height: 90%;
+      animation: spin 15s linear infinite
+    }
+
+    .o2 {
+      width: 110%;
+      height: 110%;
+      border: 1px solid rgba(245, 158, 11, .05);
+      animation: spin 25s linear infinite reverse
+    }
+
+    .hg {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+      width: 100%
+    }
+
+    .hr {
+      position: relative;
+      height: 580px;
+      perspective: 1000px
+    }
+
+    .pp {
+      position: absolute;
+      transition: transform .2s ease-out;
+      will-change: transform
+    }
+
+    .pf {
+      animation: float 8s ease-in-out infinite
+    }
+
+    .pf.rev {
+      animation: floatr 10s ease-in-out infinite
+    }
+
+    .d3 {
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%
+    }
+
+    .mono9 {
+      font: 9px var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--acc)
+    }
+
+    .bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 64px;
+      margin-top: 8px;
+      border-bottom: 1px solid rgba(245, 158, 11, .2);
+      padding-bottom: 4px
+    }
+
+    .bars i {
+      flex: 1;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(to top, rgba(245, 158, 11, .4), rgba(245, 158, 11, .8))
+    }
+
+    .tw {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: .15em solid #f59e0b;
+      vertical-align: bottom;
+      animation: typing 5s steps(40, end) infinite, caret .75s step-end infinite
+    }
+
+    .desc-i {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      opacity: .6;
+      transition: opacity .3s
+    }
+
+    .desc-i:hover {
+      opacity: 1
+    }
+
+    .desc-i div {
+      position: relative;
+      overflow: hidden;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(245, 158, 11, .3), transparent)
+    }
+
+    .desc-i i {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 16px;
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+      animation: probe 1.5s ease-in-out infinite
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      border: 1px solid rgba(245, 158, 11, .2);
+      background: rgba(245, 158, 11, .05);
+      color: var(--acc);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      box-shadow: 0 0 15px rgba(245, 158, 11, .1)
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--acc);
+      box-shadow: 0 0 5px var(--acc);
+      animation: p 2s infinite
+    }
+
+    @keyframes p {
+      50% {
+        opacity: .4
+      }
+    }
+
+    h1 {
+      font-size: clamp(48px, 9vw, 96px);
+      font-weight: 500;
+      letter-spacing: -.025em;
+      line-height: 1.05;
+      color: #fff;
+      margin: 32px 0;
+      transition: all .5s
+    }
+
+    h1:hover {
+      animation: eglow 2s ease-in-out infinite
+    }
+
+    .tg {
+      background: linear-gradient(90deg, #fff, #fef3c7, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .lead {
+      max-width: 460px;
+      color: rgba(255, 255, 255, .6);
+      font-size: 18px;
+      margin-bottom: 40px
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 40px
+    }
+
+    .chips span {
+      font: 10px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: #888;
+      border: 1px solid #222;
+      border-radius: 4px;
+      padding: 6px 10px;
+      background: var(--surf)
+    }
+
+    section {
+      padding: 96px 0;
+      border-top: 1px solid var(--bs)
+    }
+
+    section:nth-of-type(even) {
+      background: var(--bg2)
+    }
+
+    .num {
+      font: 10px var(--mono);
+      letter-spacing: .2em;
+      color: var(--acc);
+      text-transform: uppercase
+    }
+
+    h2 {
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -.025em;
+      color: #fff;
+      margin: 8px 0 12px
+    }
+
+    .desc {
+      color: rgba(255, 255, 255, .5);
+      max-width: 620px;
+      margin-bottom: 40px;
+      font-size: 14px
+    }
+
+    h3 {
+      font: 500 10px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: rgba(255, 255, 255, .3);
+      margin: 40px 0 16px
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr))
+    }
+
+    .sw {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      background: var(--surf);
+      border: 1px solid #222;
+      border-radius: 4px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color .3s
+    }
+
+    .sw:hover {
+      border-color: #444
+    }
+
+    .sw i {
+      display: block;
+      height: 56px;
+      border-radius: 2px;
+      border: 1px solid var(--b);
+      margin-bottom: 8px
+    }
+
+    .sw b {
+      font: 500 11px var(--mono);
+      color: #fff
+    }
+
+    .sw code {
+      font: 11px var(--mono);
+      color: var(--acc)
+    }
+
+    .sw small {
+      font-size: 11px;
+      color: #888
+    }
+
+    .strip {
+      display: flex;
+      height: 64px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #222
+    }
+
+    .strip div {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      padding: 6px;
+      font: 9px var(--mono);
+      color: #fff;
+      mix-blend-mode: difference
+    }
+
+    .code {
+      background: var(--surf);
+      border: 1px solid #222;
+      border-radius: 4px;
+      margin-top: 24px;
+      overflow: hidden
+    }
+
+    .code-h {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 8px 8px 16px;
+      border-bottom: 1px solid #222;
+      font: 10px var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #888
+    }
+
+    .copy {
+      font: 500 10px var(--mono);
+      letter-spacing: .1em;
+      color: #fff;
+      background: rgba(255, 255, 255, .1);
+      border: 0;
+      border-radius: 9999px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: background .3s
+    }
+
+    .copy:hover {
+      background: rgba(255, 255, 255, .2)
+    }
+
+    .copy.ok {
+      background: var(--acc);
+      color: #000
+    }
+
+    pre {
+      padding: 16px;
+      overflow: auto;
+      max-height: 420px;
+      font: 12px/1.7 var(--mono);
+      color: #a7f3d0
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--bs)
+    }
+
+    .row small {
+      font: 10px/1.6 var(--mono);
+      color: #888;
+      display: block
+    }
+
+    .row b {
+      font: 500 11px var(--mono);
+      color: #fff
+    }
+
+    .sp {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 6px 0;
+      font: 11px var(--mono);
+      color: #888
+    }
+
+    .sp i {
+      display: block;
+      height: 12px;
+      background: var(--acc);
+      border-radius: 2px;
+      opacity: .8
+    }
+
+    .sp b {
+      width: 90px;
+      color: #fff;
+      font-weight: 500
+    }
+
+    .tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px
+    }
+
+    .tile {
+      width: 130px;
+      text-align: center;
+      font: 10px var(--mono);
+      color: #888
+    }
+
+    .tile i {
+      display: block;
+      width: 130px;
+      height: 90px;
+      background: var(--surf2);
+      border: 1px solid var(--b);
+      margin-bottom: 10px
+    }
+
+    .demo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      padding: 32px;
+      border: 1px solid #222;
+      border-radius: 4px;
+      background: var(--surf)
+    }
+
+    .cards {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+    }
+
+    .card {
+      background: var(--surf);
+      border: 1px solid #222;
+      border-radius: 4px;
+      padding: 24px;
+      transition: border-color .3s
+    }
+
+    .card:hover {
+      border-color: #444
+    }
+
+    .ibox {
+      width: 48px;
+      height: 48px;
+      border: 1px solid #222;
+      background: var(--surf2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      margin: 24px 0 16px
+    }
+
+    .ml {
+      display: flex;
+      justify-content: space-between;
+      font: 10px var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #888
+    }
+
+    .spot {
+      position: relative;
+      border: 1px solid var(--bs);
+      border-radius: 16px;
+      padding: 32px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .015)), #101010;
+      overflow: hidden
+    }
+
+    .spot:before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(400px circle at var(--mx, 0) var(--my, 0), rgba(255, 255, 255, .08), transparent 40%);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none
+    }
+
+    .spot:hover:before {
+      opacity: 1
+    }
+
+    .glass {
+      background: rgba(245, 158, 11, .03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(245, 158, 11, .2);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: inset 0 0 20px rgba(245, 158, 11, .05), 0 10px 30px rgba(0, 0, 0, .5);
+      position: relative;
+      overflow: hidden
+    }
+
+    .glass:before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 158, 11, .15), transparent 40%);
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+      border-radius: inherit
+    }
+
+    .glass:hover:before {
+      opacity: 1
+    }
+
+    .st {
+      font: 12px var(--mono);
+      color: var(--neon)
+    }
+
+    .dg {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #d97706;
+      animation: p 2s infinite
+    }
+
+    footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--b);
+      font-size: 12px;
+      color: rgba(255, 255, 255, .3)
+    }
+
+    @media(max-width:1023px) {
+      .hg {
+        grid-template-columns: 1fr
+      }
+
+      .sing {
+        width: 400px;
+        height: 400px;
+        right: 5%
+      }
+    }
+
+    @media(max-width:700px) {
+      .row {
+        grid-template-columns: 1fr
+      }
+
+      .hr {
+        display: none
+      }
+
+      .hero {
+        min-height: 720px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="wrap"><a class="logo" href="#top">Velora <span style="color:#888;font-weight:300">/ Design
+          System</span></a>
+      <nav class="links"><a href="#colors">Colors</a><a href="#type">Typography</a><a href="#space">Spacing</a><a
+          href="#radius">Radius</a><a href="#shadows">Shadows</a><a href="#comp">Components</a><a
+          href="#tokens">Tokens</a><a href="#start">Quick Start</a></nav>
+      <a class="btn b-white" href="#tokens">Tokens</a>
+    </div>
+  </header>
+  <main id="top">
+    <div class="hero" id="hero">
+      <div class="hbg">
+        <div class="fog"></div>
+        <div class="waves"><i
+            style="left:20%;width:128px;filter:blur(40px);animation:wave 8s ease-in-out infinite"></i><i
+            style="left:50%;width:192px;filter:blur(50px);animation:wave 12s ease-in-out 2s infinite"></i><i
+            style="right:20%;width:96px;filter:blur(30px);animation:wave 10s ease-in-out 4s infinite"></i></div>
+        <div class="parts"><i
+            style="left:25%;width:2px;height:32px;filter:blur(1px);animation:rise 5s linear infinite"></i><i
+            style="left:45%;width:2px;height:48px;filter:blur(2px);animation:rise 7s linear 1s infinite"></i><i
+            style="left:65%;width:1px;height:24px;filter:blur(1px);animation:rise 6s linear 2s infinite"></i><i
+            style="left:85%;width:2px;height:40px;filter:blur(1px);animation:rise 8s linear 3s infinite"></i><i
+            style="left:35%;width:3px;height:64px;filter:blur(3px);animation:rise 9s linear .5s infinite"></i></div>
+        <div class="sing">
+          <div class="r1"></div>
+          <div class="r2"></div>
+          <div class="o1"><i
+              style="top:0;left:50%;width:6px;height:6px;background:#f59e0b;box-shadow:0 0 10px #f59e0b;transform:translate(-50%,-50%)"></i>
+          </div>
+          <div class="o2"><i
+              style="bottom:0;left:50%;width:4px;height:4px;background:rgba(255,255,255,.6);box-shadow:0 0 8px #fff;transform:translate(-50%,50%)"></i><i
+              style="top:50%;right:0;width:8px;height:8px;background:rgba(245,158,11,.8);box-shadow:0 0 12px #f59e0b;transform:translate(50%,-50%)"></i>
+          </div>
+        </div>
+      </div>
+      <div class="wrap hg">
+        <div style="position:relative;z-index:2">
+          <span class="badge"><span class="dot"></span>System Active: V.1 Design System</span>
+          <h1>Velora<br><span class="tg">Creative Intelligence.</span></h1>
+          <p class="lead">Tokens, tipografia e componentes extraídos da página de referência: dark profundo, acento
+            ouro solar, tipografia Inter light e pills com glow.</p>
+          <div style="display:flex;gap:16px;flex-wrap:wrap"><a class="btn b-acc" href="#colors">Explorar tokens
+              <iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a><a class="btn b-ghost"
+              href="#start"><iconify-icon icon="solar:play-circle-linear" style="color:#f59e0b"></iconify-icon>Quick
+              Start</a></div>
+          <div class="chips"><span>Inter 300–600</span><span>Accent #f59e0b</span><span>Base 4px</span><span>Tailwind
+              CSS</span><span>Dark only</span></div>
+        </div>
+        <div class="hr" id="par">
+          <div class="pp" data-depth=".15" style="top:10%;right:15%;width:240px">
+            <div class="glass pf" style="box-shadow:0 25px 50px rgba(0,0,0,.5),inset 0 0 20px rgba(245,158,11,.05)">
+              <div style="display:flex;justify-content:space-between;align-items:center;opacity:.7;margin-bottom:16px">
+                <div style="display:flex;align-items:center;gap:8px"><iconify-icon icon="solar:chart-square-linear"
+                    style="color:#f59e0b;font-size:18px"></iconify-icon><span class="mono9">SYS.PARAMS</span></div><span
+                  class="dot" style="width:4px;height:4px"></span>
+              </div>
+              <div class="bars"><i style="animation:bar1 2s ease-in-out infinite"></i><i
+                  style="animation:bar2 2.5s ease-in-out infinite;opacity:.8"></i><i
+                  style="animation:bar3 1.8s ease-in-out infinite;box-shadow:0 0 8px rgba(245,158,11,.4)"></i><i
+                  style="animation:bar1 3s ease-in-out infinite"></i><i
+                  style="animation:bar2 2.2s ease-in-out infinite;opacity:.7"></i></div>
+            </div>
+          </div>
+          <div class="pp" data-depth=".4" style="top:35%;left:5%;width:360px;z-index:3">
+            <div class="glass pf rev"
+              style="padding:0;border-radius:32px;border-color:rgba(245,158,11,.3);box-shadow:0 30px 60px rgba(0,0,0,.6)">
+              <div
+                style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,158,11,.05),transparent);pointer-events:none">
+              </div>
+              <div style="position:relative;padding:32px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px;opacity:.6"><i class="d3"
+                    style="background:rgba(245,158,11,.5)"></i><i class="d3"
+                    style="background:rgba(245,158,11,.3)"></i><i class="d3"
+                    style="background:rgba(245,158,11,.1)"></i><span class="mono9" style="margin-left:auto">Input
+                    Stream</span></div>
+                <p
+                  style="font:500 10px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;display:flex;align-items:center;gap:8px">
+                  <iconify-icon icon="solar:pen-new-square-linear" style="color:#f59e0b"></iconify-icon>Generating
+                  Reality</p>
+                <div
+                  style="font-size:18px;font-weight:500;color:#fff;letter-spacing:-.025em;height:56px;line-height:1.4">
+                  <span class="tw" style="max-width:100%">"A hyper-realistic cinematic portrait..."</span></div>
+                <div
+                  style="height:4px;background:rgba(245,158,11,.1);border-radius:9999px;margin-top:24px;overflow:hidden;position:relative">
+                  <div
+                    style="position:absolute;inset:0 auto 0 0;width:60%;background:linear-gradient(90deg,rgba(245,158,11,.5),#f59e0b);box-shadow:0 0 10px #f59e0b">
+                    <i
+                      style="position:absolute;right:0;top:0;bottom:0;width:32px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8))"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pp" data-depth=".25" style="bottom:10%;right:5%;width:180px;z-index:2">
+            <div class="glass pf" style="padding:24px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.4)">
+              <iconify-icon icon="solar:cpu-linear" style="color:#f59e0b;font-size:20px;opacity:.8"></iconify-icon>
+              <div
+                style="font-size:36px;font-weight:500;letter-spacing:-.025em;color:#fff;line-height:1.2;margin:8px 0 4px">
+                <span id="cnt" data-target="99.8">0.8</span><span
+                  style="font-size:14px;color:#f59e0b;margin-left:4px">%</span></div>
+              <div class="mono9" style="color:rgba(255,255,255,.5)">Neural Match</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="desc-i"><span class="mono9">Descend</span>
+        <div><i></i></div>
+      </div>
+    </div>
+    <div id="app"></div>
+  </main>
+  <footer>
+    <div class="wrap">Velora Design System · extraído de “Página de referência.html” · clique em qualquer swatch ou
+      botão COPY para copiar.</div>
+  </footer>
+  <script>
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const C = {
+      Backgrounds: [['bg', '#030303', 'Body, footer'], ['bg-section', '#050505', 'Seções alternadas'], ['surface', '#0a0a0a', 'Cards'], ['surface-raised', '#111111', 'Ícones, pricing'], ['surface-glass', 'rgba(10,10,10,.4)', 'Glass panel + blur 24px']],
+      Text: [['text', '#e2e8f0', 'Body base'], ['text-strong', '#ffffff', 'Títulos'], ['text-70', 'rgba(255,255,255,.7)', 'Listas'], ['text-60', 'rgba(255,255,255,.6)', 'Lead'], ['text-50', 'rgba(255,255,255,.5)', 'Nav links'], ['text-40', 'rgba(255,255,255,.4)', 'Rodapé'], ['text-30', 'rgba(255,255,255,.3)', 'Labels'], ['text-muted', '#888888', 'Meta de cards']],
+      Borders: [['border-subtle', 'rgba(255,255,255,.05)', 'Divisores'], ['border', 'rgba(255,255,255,.10)', 'Navbar, footer'], ['border-strong', 'rgba(255,255,255,.20)', 'Botão outline'], ['border-solid', '#222222', 'Cards'], ['border-hover', '#444444', 'Hover de cards']],
+      Accent: [['accent', '#f59e0b', 'CTA, badges, glow'], ['accent-neon', '#fbbf24', 'Status ACTIVE, linhas'], ['accent-light', '#fef3c7', 'Gradiente de título'], ['accent-tint-5', 'rgba(245,158,11,.05)', 'Fundo ghost/badge'], ['accent-tint-20', 'rgba(245,158,11,.2)', 'Borda badge'], ['accent-tint-30', 'rgba(245,158,11,.3)', 'Borda ghost']],
+      Status: [['success', '#fbbf24', 'ACTIVE'], ['online', '#d97706', 'Operational'], ['info', '#f97316', 'Ícone Palette'], ['warning', '#ea580c', 'Ícone Grid']]
+    };
+    const T = [['display', '96px', '1.05', 500, '-0.025em', 'Hero h1 (lg)', 'Omniscience'], ['display-md', '72px', '1.05', 500, '-0.025em', 'Hero h1 (md)', 'Creative Matrix'], ['title-xl', '48px', '1.1', 500, '-0.025em', 'Títulos de seção', 'Synthesis'], ['title', '36px', '1.2', 500, '-0.025em', 'Subtítulos', 'Motion Directing'], ['title-sm', '24px', '1.3', 400, '-0.025em', 'Cards', 'Live collaboration'], ['lead', '18px', '1.625', 300, '0', 'Texto de apoio', 'Synthesize campaigns from pure thought.'], ['body', '14px', '1.625', 300, '0', 'Corpo', 'Autonomous creative matrix for brands.'], ['caption', '12px', '1.5', 500, '0', 'Nav, botões', 'Intelligence · Studios · Portal'], ['label', '10px', '1.5', 500, '0.18em', 'Mono, uppercase', 'System Active: V.4']];
+    const S = [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 32], R = [['xs', '2px', 'Caixa de ícone'], ['sm', '4px', 'Cards técnicos'], ['md', '6px', '—'], ['xl', '12px', '—'], ['2xl', '16px', 'Spotlight, glass'], ['3xl', '24px', 'Cards grandes'], ['full', '9999px', 'Botões, badges']];
+    const SH = [['glow-white', '0 0 20px rgba(255,255,255,.15)'], ['glow-accent-sm', '0 0 15px rgba(245,158,11,.1)'], ['glow-accent', '0 0 30px rgba(245,158,11,.3)'], ['glow-accent-lg', '0 0 60px rgba(245,158,11,.2)'], ['glow-ring', '0 0 120px rgba(245,158,11,.15), inset 0 0 80px rgba(245,158,11,.1)'], ['panel', '0 20px 40px rgba(0,0,0,.4)'], ['panel-lg', '0 30px 60px rgba(0,0,0,.6)'], ['inset-hl', 'inset 0 1px 0 rgba(255,255,255,.04)']];
+    const flat = Object.values(C).flat();
+    const cssC = Object.entries(C).map(([g, a]) => `  /* ${g} */\n` + a.map(x => `  --color-${x[0]}: ${x[1]};`).join('\n')).join('\n');
+    const cssT = `  --font-sans: 'Inter', sans-serif;\n  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;\n` + T.map(t => `  --text-${t[0]}: ${t[1]};`).join('\n') + `\n  --weight-light: 300; --weight-regular: 400; --weight-medium: 500; --weight-semibold: 600;\n  --tracking-tight: -0.025em; --tracking-wide: 0.1em; --tracking-widest: 0.18em;`;
+    const cssS = S.map(n => `  --space-${n}: ${n * 4}px;`).join('\n') + `\n  --container: 1280px; --gutter: 24px;`;
+    const cssR = R.map(r => `  --radius-${r[0]}: ${r[1]};`).join('\n');
+    const cssH = SH.map(s => `  --shadow-${s[0]}: ${s[1]};`).join('\n');
+    const cssM = `  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);\n  --duration-fast: 300ms; --duration-base: 500ms; --duration-slow: 1000ms;\n  --blur-glass: 24px; --blur-panel: 12px;`;
+    const code = (id, t, l) => `<div class="code"><div class="code-h"><span>${l}</span><button class="copy" data-c="${id}">COPY</button></div><pre id="${id}">${esc(t)}</pre></div>`;
+    const sec = (n, id, t, d, b) => `<section id="${id}"><div class="wrap"><span class="num">${n} — ${id}</span><h2>${t}</h2><p class="desc">${d}</p>${b}</div></section>`;
+    const sw = a => `<div class="grid">` + a.map(x => `<button class="sw" data-v="${x[1]}"><i style="background:${x[1]}"></i><b>--color-${x[0]}</b><code>${x[1]}</code><small>${x[2]}</small></button>`).join('') + `</div>`;
+    const strip = [5, 10, 20, 30, 40, 60, 100].map(a => `<div style="background:rgba(245,158,11,${a / 100})">${a}%</div>`).join('');
+    const btnCode = `<!-- Primário (emerald) -->
+<button class="px-8 py-4 rounded-full bg-[#f59e0b] text-black text-xs font-semibold border border-[#f59e0b] shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:scale-105 transition-transform duration-300">Commence Creation</button>
+<!-- Ghost -->
+<button class="px-8 py-4 rounded-full border border-[#f59e0b]/30 bg-[#f59e0b]/5 backdrop-blur-md text-white text-xs font-medium hover:bg-[#f59e0b]/10 hover:border-[#f59e0b]/50 transition-all duration-300">View Transmissions</button>
+<!-- Branco (nav) -->
+<a class="px-5 py-2.5 rounded-full bg-white text-black text-xs font-medium hover:bg-white/90 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.15)]">Initialize</a>
+<!-- Soft / Outline -->
+<button class="px-6 py-3 rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-colors">Initialize Core</button>
+<button class="px-6 py-3 rounded-full border border-white/20 text-white text-xs font-medium hover:bg-white/10 transition-colors">Outline</button>
+<!-- Badge -->
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#f59e0b]/20 bg-[#f59e0b]/5 text-[#f59e0b] text-[10px] font-medium uppercase tracking-widest">System Active</div>
+<!-- Card técnico -->
+<div class="bg-[#0A0A0A] border border-[#222222] rounded-[4px] p-6 hover:border-[#444444] transition-colors duration-300">...</div>
+<!-- Spotlight card -->
+<div class="spotlight-wrapper rounded-2xl p-8 border border-white/5">...</div>
+<!-- Glass panel -->
+<div class="rounded-2xl p-5" style="background:rgba(245,158,11,.03);backdrop-filter:blur(12px);border:1px solid rgba(245,158,11,.2)">...</div>`;
+    const tokens = `/* ===== VELORA DESIGN SYSTEM — TOKENS ===== */\n:root {\n  /* COLORS */\n${cssC}\n\n  /* TYPOGRAPHY */\n${cssT}\n\n  /* SPACING (base 4px) */\n${cssS}\n\n  /* RADIUS */\n${cssR}\n\n  /* SHADOWS */\n${cssH}\n\n  /* MOTION */\n${cssM}\n}`;
+    const start = `<!-- 1. <head> -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"><\/script>
+<script src="https://code.iconify.design/iconify-icon/2.0.0/iconify-icon.min.js"><\/script>
+
+/* 2. CSS global */
+body { font-family: 'Inter', sans-serif; background: #030303; color: #e2e8f0; overflow-x: hidden; }
+::selection { background: rgba(255,255,255,.2); color: #fff; }
+
+<!-- 3. Exemplo -->
+<body class="antialiased bg-[#030303]">
+  <section class="py-32 bg-[#050505] border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-4xl font-medium tracking-tight text-white">Título</h2>
+      <p class="text-sm font-light text-white/60 mt-4">Texto de apoio.</p>
+    </div>
+  </section>
+</body>`;
+    const typeRows = T.map(t => `<div class="row"><div><b>${t[0]}</b><small>${t[1]} / ${t[2]} · w${t[3]} · ${t[4]}<br>${t[5]}</small></div><div style="font-size:${t[1] == '96px' || t[1] == '72px' ? 'clamp(32px,6vw,' + t[1] + ')' : t[1]};line-height:${t[2]};font-weight:${t[3]};letter-spacing:${t[4]};color:#fff;${t[0] == 'label' ? "font-family:var(--mono);text-transform:uppercase;color:#f59e0b;" : ''}">${t[6]}</div></div>`).join('');
+    const spaceRows = S.map(n => `<div class="sp"><b>space-${n}</b><span style="width:50px">${n * 4}px</span><i style="width:${n * 4}px"></i></div>`).join('');
+    const radTiles = R.map(r => `<div class="tile"><i style="border-radius:${r[1]}"></i>${r[0]} · ${r[1]}<br>${r[2]}</div>`).join('');
+    const shTiles = SH.map(s => `<div class="tile"><i style="box-shadow:${s[1]};border-radius:4px"></i>${s[0]}</div>`).join('');
+    const comp = `<h3>Botões</h3><div class="demo"><a class="btn b-white">Initialize</a><button class="btn b-acc">Commence Creation →</button><button class="btn b-ghost"><span style="color:var(--acc)">▶</span> View Transmissions</button><button class="btn b-soft">Initialize Core</button><button class="btn b-out">Outline</button></div>
+<h3>Badges &amp; status</h3><div class="demo"><span class="badge"><span class="dot"></span>System Active: V.4 Omni</span><span class="st">● ACTIVE</span><button class="btn b-out"><span class="dg"></span>System Status: Operational</button></div>
+<h3>Cards</h3><div class="cards"><div class="card"><div class="ml"><span>Module 02</span><span>SYS.MD</span></div><div class="ibox">▶</div><div style="color:#fff;font-weight:500">Motion Directing</div><p style="font-size:13px;color:#888">Card técnico · radius 4px · borda #222 → #444 no hover.</p></div>
+<div class="spot"><div style="font-size:12px;color:rgba(255,255,255,.7)">Elena altered parameters</div><div class="ml" style="margin-top:4px;color:rgba(255,255,255,.3)">Live collaboration</div><p style="margin-top:40px;font-size:13px;color:rgba(255,255,255,.4)">Spotlight card · passe o mouse.</p></div>
+<div class="glass"><div class="ml" style="color:var(--acc)">Glass panel</div><p style="margin-top:32px;font-size:13px;color:rgba(255,255,255,.6)">Tint emerald 3% + blur 12px + borda emerald 20%.</p></div></div>`;
+    document.getElementById('app').innerHTML =
+      sec('01', 'colors', 'Colors', 'Paleta funcional: fundos quase pretos, texto em branco com opacidades e um único acento esmeralda. Clique para copiar o valor.', Object.entries(C).map(([g, a]) => `<h3>${g}</h3>${sw(a)}`).join('') + `<h3>Accent strip — #f59e0b em opacidades</h3><div class="strip">${strip}</div>` + code('c1', cssC, 'CSS · colors')) +
+      sec('02', 'type', 'Typography', 'Inter em pesos leves (300–500), títulos com tracking apertado e labels em mono uppercase.', typeRows + code('c2', cssT, 'CSS · typography')) +
+      sec('03', 'space', 'Spacing', 'Escala Tailwind com unidade base de 4px. Container máximo 1280px, gutter de 24px, seções com 128px de respiro vertical.', spaceRows + code('c3', cssS, 'CSS · spacing')) +
+      sec('04', 'radius', 'Radius', 'Dois mundos: cantos quase retos (2–4px) em UI técnica e pills (9999px) em ações.', `<div class="tiles">${radTiles}</div>` + code('c4', cssR, 'CSS · radius')) +
+      sec('05', 'shadows', 'Shadows', 'Sombras são glows: branco em ações neutras, esmeralda em ações de marca e hero.', `<div class="tiles">${shTiles}</div>` + code('c5', cssH + '\n' + cssM, 'CSS · shadows + motion')) +
+      sec('06', 'comp', 'Components', 'Componentes reais com os estilos extraídos. Os snippets usam as mesmas classes Tailwind da página original.', comp + code('c6', btnCode, 'HTML · Tailwind')) +
+      sec('07', 'tokens', 'Tokens', 'Bloco completo, organizado por categoria.', code('c7', tokens, 'CSS · :root')) +
+      sec('08', 'start', 'Quick Start', 'Do zero ao visual Velora em três passos.', code('c8', start, 'HTML · setup'));
+    function copy(t, b, l) {
+      const done = () => { b.classList.add('ok'); const o = b.textContent; b.textContent = l || 'COPIED'; setTimeout(() => { b.classList.remove('ok'); b.textContent = o }, 1400) };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(done, () => fb()); else fb();
+      function fb() { const a = document.createElement('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); done() } catch (e) { } a.remove() }
+    }
+    document.addEventListener('click', e => { const c = e.target.closest('[data-c]'); if (c) return copy(document.getElementById(c.dataset.c).textContent, c, 'COPIED'); const s = e.target.closest('.sw'); if (s) { const o = s.querySelector('code'); copy(s.dataset.v, s.querySelector('b'), 'COPIED'); } });
+    document.addEventListener('mousemove', e => { const s = e.target.closest('.spot,.glass'); if (s) { const r = s.getBoundingClientRect(); s.style.setProperty('--mx', e.clientX - r.left + 'px'); s.style.setProperty('--my', e.clientY - r.top + 'px') } });
+
+    (function () {
+      const h = document.getElementById('hero'), ps = h.querySelectorAll('.pp');
+      h.addEventListener('mousemove', e => { const x = (e.clientX / innerWidth - .5) * 2, y = (e.clientY / innerHeight - .5) * 2; ps.forEach(p => { const d = parseFloat(p.dataset.depth) || .2; p.style.transform = `translate3d(${x * 40 * d}px,${y * 40 * d}px,0) rotateX(${-y * 8 * d}deg) rotateY(${x * 8 * d}deg)` }) });
+      h.addEventListener('mouseleave', () => ps.forEach(p => p.style.transform = 'translate3d(0,0,0) rotateX(0) rotateY(0)'));
+      const c = document.getElementById('cnt'), tg = parseFloat(c.dataset.target);
+      const up = t0 => { const k = Math.min((performance.now() - t0) / 2000, 1); c.textContent = (tg * k).toFixed(1); if (k < 1) requestAnimationFrame(() => up(t0)) }; setTimeout(() => up(performance.now()), 800)
+    })();
+  </script>
+</body>
+
+</html>
