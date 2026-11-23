@@ -1985,27 +1985,119 @@
       padding: 0
     }
 
+    /* ============ RODAPÉ / CONTATO ============ */
     footer {
-      padding: 48px 0;
+      padding: 72px 0 28px;
       border-top: 1px solid var(--b);
-      font-size: 12px;
-      color: rgba(255, 255, 255, .3)
+      background: var(--bg);
+      font-size: 14px;
+      color: rgba(255, 255, 255, .62);
+      scroll-margin-top: 80px
     }
 
-    footer .wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap
+    .fgrid {
+      display: grid;
+      grid-template-columns: 1.35fr 1.2fr 1.35fr .9fr;
+      gap: 48px
+    }
+
+    .fcol>.num {
+      display: block;
+      margin-bottom: 22px
     }
 
     footer .logo {
-      font-size: 14px
+      font-size: 17px
     }
 
-    footer .links {
-      display: flex
+    .fbrand p {
+      margin-top: 20px;
+      max-width: 34ch;
+      font-size: 14px;
+      line-height: 1.65
+    }
+
+    .flist {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 18px
+    }
+
+    .flist li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0
+    }
+
+    .flist li.top-al {
+      align-items: flex-start
+    }
+
+    .flist li>div {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      overflow-wrap: anywhere
+    }
+
+    .fk {
+      font: 9px var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .4)
+    }
+
+    .flist a,
+    .flist address {
+      font-style: normal;
+      color: #fff;
+      line-height: 1.5;
+      transition: color .3s
+    }
+
+    .flist a:hover {
+      color: var(--acc)
+    }
+
+    footer .ibox {
+      width: 40px;
+      height: 40px;
+      font-size: 18px
+    }
+
+    .flist li:hover .ibox,
+    .fsoc a:hover {
+      color: var(--acc);
+      border-color: rgba(var(--acc-rgb), .5)
+    }
+
+    .fsoc {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    .fsoc a {
+      transition: color .3s, border-color .3s, box-shadow .3s
+    }
+
+    .fsoc a:hover {
+      box-shadow: 0 0 18px rgba(var(--acc-rgb), .25)
+    }
+
+    .fbot {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px 24px;
+      flex-wrap: wrap;
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--bs);
+      font-size: 12px;
+      color: rgba(255, 255, 255, .4)
     }
 
     @media (max-width: 1100px) {
@@ -2040,8 +2132,13 @@
         position: static
       }
 
-      footer .links {
-        display: flex
+      .fgrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px 32px
+      }
+
+      .fbrand {
+        grid-column: 1 / -1
       }
     }
 
@@ -2103,9 +2200,17 @@
         width: 100%
       }
 
-      footer .wrap {
-        flex-direction: column;
-        align-items: flex-start
+      footer {
+        padding: 56px 0 24px
+      }
+
+      .fgrid {
+        grid-template-columns: 1fr;
+        gap: 36px
+      }
+
+      .fbot {
+        margin-top: 40px
       }
     }
 
@@ -2627,8 +2732,7 @@
       color: rgba(255, 255, 255, .62)
     }
 
-    .yl span,
-    footer {
+    .yl span {
       color: rgba(255, 255, 255, .55)
     }
 
@@ -3325,6 +3429,7 @@
         <a href="#resultados">Casos reais</a>
         <a href="#garantias">Garantias</a>
         <a href="#faq">Dúvidas</a>
+        <a href="#contato">Contato</a>
       </nav>
       <a class="btn b-acc sm" href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Quero%20uma%20simula%C3%A7%C3%A3o%20gratuita%20de%20energia%20solar." target="_blank" rel="noopener">
         <iconify-icon icon="ic:baseline-whatsapp" style="font-size:16px"></iconify-icon><span>Simulação grátis</span>
@@ -3348,6 +3453,7 @@
       <a href="#resultados">Casos reais<iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a>
       <a href="#garantias">Garantias<iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a>
       <a href="#faq">Dúvidas<iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a>
+      <a href="#contato">Contato<iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a>
     </nav>
     <a class="btn b-acc" href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Quero%20uma%20simula%C3%A7%C3%A3o%20gratuita%20de%20energia%20solar." target="_blank" rel="noopener"><iconify-icon icon="ic:baseline-whatsapp"></iconify-icon>Simulação grátis no WhatsApp</a>
   </aside>
@@ -3843,10 +3949,60 @@
     </section>
   </main>
 
-  <footer>
+  <footer id="contato">
     <div class="wrap">
-      <a class="logo" href="#inicio"><span class="logo-mark"><iconify-icon icon="solar:sun-bold"></iconify-icon></span>Helios Energia</a>
-      <span>© 2026 Helios Energia · Energia solar residencial e empresarial.</span>
+      <div class="fgrid">
+        <div class="fcol fbrand">
+          <a class="logo" href="#inicio"><span class="logo-mark"><iconify-icon icon="solar:sun-bold"></iconify-icon></span>Helios Energia</a>
+          <p>Projeto e instalação completa de energia solar residencial e empresarial. Economia real a partir do primeiro mês.</p>
+        </div>
+
+        <div class="fcol">
+          <span class="num">Endereço</span>
+          <ul class="flist">
+            <li class="top-al">
+              <span class="ibox"><iconify-icon icon="solar:map-point-linear"></iconify-icon></span>
+              <div>
+                <span class="fk">Nossa sede</span>
+                <address>Av. Exemplo, 000<br>Bairro Centro<br>Cidade - UF</address>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <span class="num">Contatos</span>
+          <ul class="flist">
+            <li>
+              <span class="ibox"><iconify-icon icon="solar:letter-linear"></iconify-icon></span>
+              <div><span class="fk">E-mail</span><a href="mailto:contato@heliosenergia.com.br">contato@heliosenergia.com.br</a></div>
+            </li>
+            <li>
+              <span class="ibox"><iconify-icon icon="solar:phone-linear"></iconify-icon></span>
+              <div><span class="fk">Telefone</span><a href="tel:+5500000000000">(00) 0000-0000</a></div>
+            </li>
+            <li>
+              <span class="ibox"><iconify-icon icon="ic:baseline-whatsapp"></iconify-icon></span>
+              <div><span class="fk">WhatsApp</span><a href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Estive%20no%20site%20e%20gostaria%20de%20receber%20uma%20simula%C3%A7%C3%A3o%20gratuita%20para%20saber%20quanto%20posso%20economizar%20na%20minha%20conta%20de%20luz%20com%20energia%20solar." target="_blank" rel="noopener">(00) 00000-0000</a></div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="fcol">
+          <span class="num">Redes sociais</span>
+          <div class="fsoc">
+            <a class="ibox" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><iconify-icon icon="simple-icons:instagram"></iconify-icon></a>
+            <a class="ibox" href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><iconify-icon icon="simple-icons:facebook"></iconify-icon></a>
+            <a class="ibox" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><iconify-icon icon="simple-icons:youtube"></iconify-icon></a>
+            <a class="ibox" href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><iconify-icon icon="simple-icons:linkedin"></iconify-icon></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="fbot">
+        <span>© 2026 Helios Energia · Energia solar residencial e empresarial.</span>
+        <span>Atendimento humanizado por especialistas de engenharia</span>
+      </div>
     </div>
   </footer>
 
@@ -4261,6 +4417,8 @@
           const r = s.getBoundingClientRect();
           if (r.top <= line && r.bottom > line) cur = s;
         });
+        // no fim da página o rodapé (Contato) pode nunca chegar à linha de leitura: marca-o ao chegar embaixo
+        if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) cur = sections[sections.length - 1];
         items.forEach(({ a, s }) => {
           const on = s === cur;
           a.classList.toggle('on', on);
