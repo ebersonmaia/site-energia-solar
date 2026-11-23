@@ -3213,6 +3213,22 @@
         border-left: 0
       }
 
+      /* 4 colunas iguais, cada uma com o conteúdo centralizado: o conjunto fica distribuído e centrado na tela */
+      .hero .hg .trust {
+        left: 12px;
+        right: 12px
+      }
+
+      .hero .hg .trust li {
+        align-items: center;
+        text-align: center
+      }
+
+      .hero .hg .trust b {
+        justify-content: center;
+        flex-wrap: wrap
+      }
+
       .hero .hg .trust b {
         font-size: 15px;
         gap: 5px
@@ -3236,6 +3252,23 @@
 
       .hero .hg .hr {
         margin-top: 44px
+      }
+    }
+
+    /* telas muito estreitas (≤380px): ícone e número continuam na mesma linha em todas as 4 colunas */
+    @media (max-width: 380px) {
+      .hero .hg .trust b {
+        font-size: 13.5px;
+        gap: 4px;
+        flex-wrap: nowrap
+      }
+
+      .hero .hg .trust b iconify-icon {
+        font-size: 12px
+      }
+
+      .hero .hg .trust li {
+        padding: 0 4px
       }
     }
 
@@ -3969,8 +4002,7 @@
 
         const v = VIDEOS[k];
         iframe = document.createElement('iframe');
-        // celular: modo "background" (autoplay mudo, sem interface e sem a miniatura/poster do Vimeo, que tem outro enquadramento)
-        iframe.src = `https://player.vimeo.com/video/${v.id}?autopause=0&player_id=0&app_id=58479&controls=0&muted=1&playsinline=1&title=0&byline=0&portrait=0${k === 'mobile' ? '&background=1' : ''}`;
+        iframe.src = `https://player.vimeo.com/video/${v.id}?autopause=0&player_id=0&app_id=58479&controls=0&muted=1&playsinline=1&title=0&byline=0&portrait=0`;
         iframe.title = v.title;
         iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
         iframe.referrerPolicy = 'strict-origin-when-cross-origin';
@@ -3980,36 +4012,6 @@
         wrap.appendChild(iframe);
 
         const p = player = new Vimeo.Player(iframe);
-
-        if (k === 'mobile') {
-          // O vídeo nunca deve ficar tocando: o scroll é quem manda. Qualquer "play" (ex.: o autoplay do modo
-          // background, que pode chegar depois do nosso pause) é pausado na hora.
-          let started = false;
-          p.on('play', () => { started = true; p.pause().catch(() => { }); });
-          p.ready()
-            .then(() => p.getDuration().then(d => { duration = d; }))
-            // espera o autoplay mudo iniciar (carrega e decodifica os quadros); se o aparelho bloquear, força um play
-            .then(() => new Promise(r => {
-              const t0 = performance.now();
-              const wait = () => {
-                if (started || performance.now() - t0 > 900) r();
-                else setTimeout(wait, 50);
-              };
-              wait();
-            }))
-            .then(() => started ? 0 : p.play().catch(() => { }))
-            .then(() => p.pause().catch(() => { }))
-            // volta ao quadro 0 e dá um respiro para ele ser pintado antes de aparecer (evita mostrar outro quadro)
-            .then(() => p.setCurrentTime(0).catch(() => { }))
-            .then(() => new Promise(r => setTimeout(r, 300)))
-            .catch(() => { })
-            .then(() => {
-              if (p !== player) return;
-              ready = true;
-              reveal();
-            });
-          return;
-        }
 
         p.ready()
           .then(() => p.getDuration().then(d => { duration = d; }))
@@ -4021,6 +4023,16 @@
             ready = true;
             reveal();
           });
+
+        // rede de segurança: se alguma etapa do Vimeo demorar demais, o vídeo ainda assim passa a responder ao scroll
+        setTimeout(() => {
+          if (p !== player || ready) return;
+          p.getDuration().then(d => { duration = d; }).catch(() => { }).then(() => {
+            if (p !== player || ready) return;
+            ready = true;
+            reveal();
+          });
+        }, 6000);
       };
 
       setTimeout(() => { introDone = true; reveal(); }, INTRO_MS);
