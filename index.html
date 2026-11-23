@@ -3118,6 +3118,13 @@
       }
     }
 
+    /* troca imagem -> vídeo no celular: dissolução mais longa e suave, para a passagem não ser notada */
+    @media (max-width: 767px) {
+      .vwrap {
+        transition: opacity 1.6s cubic-bezier(.4, 0, .2, 1)
+      }
+    }
+
     /* ============ HERO — SMARTPHONE: 1ª dobra só com cabeçalho + vídeo; o conteúdo vai para a 2ª dobra ============ */
     @media (max-width: 640px) {
       .hero {
@@ -3896,7 +3903,35 @@
         return Math.min(Math.max(-top / Math.max(dist, 1), 0), 1);
       };
 
-      const kick = () => { if (!raf) raf = requestAnimationFrame(step); };
+      const kick = () => { if (!raf) raf = requestAnimationFrame(kind === 'mobile' ? stepMobile : step); };
+
+      // Celular: rolagem -> tempo do vídeo de forma fluida.
+      //  • suavização independente da taxa de quadros (o tempo "persegue" a rolagem em vez de pular);
+      //  • no máximo 1 busca (seek) a cada ~60 ms e só quando o movimento passa de ~1,5 quadro, sem enfileirar buscas;
+      //  • sempre alinhado a quadros inteiros e com busca final exata quando a rolagem para.
+      const FPS = 25, MIN_STEP = 1.5 / FPS, SEND_EVERY = 60, TAU = 160;
+      let lastFrameT = 0, lastSendAt = 0;
+      const stepMobile = now => {
+        raf = 0;
+        if (!ready || !player) return;
+        const dt = lastFrameT ? Math.min(now - lastFrameT, 64) : 16;
+        lastFrameT = now;
+        current += (target - current) * (1 - Math.exp(-dt / TAU));
+        const settled = Math.abs(target - current) < .004;
+        if (settled) current = target;
+        const want = Math.min(Math.max(Math.round(current * FPS) / FPS, 0), Math.max(duration - .05, 0));
+        if (!busy && now - lastSendAt >= SEND_EVERY && Math.abs(want - lastSent) >= (settled ? .5 / FPS : MIN_STEP)) {
+          busy = true;
+          lastSent = want;
+          lastSendAt = now;
+          const p = player;
+          p.setCurrentTime(want).catch(() => { }).then(() => {
+            busy = false;
+            if (p === player) kick();
+          });
+        }
+        if (!settled || Math.abs(want - lastSent) >= .5 / FPS) kick(); else lastFrameT = 0;
+      };
 
       const step = () => {
         raf = 0;
@@ -3927,14 +3962,15 @@
       const mount = k => {
         if (k === kind) return;
         kind = k;
-        ready = false; busy = false; lastSent = -1; current = 0; duration = 0;
+        ready = false; busy = false; lastSent = -1; current = 0; duration = 0; lastFrameT = 0; lastSendAt = 0;
         wrap.classList.remove('on');
         if (player) { try { player.destroy(); } catch (e) { } }
         wrap.textContent = '';
 
         const v = VIDEOS[k];
         iframe = document.createElement('iframe');
-        iframe.src = `https://player.vimeo.com/video/${v.id}?autopause=0&player_id=0&app_id=58479&controls=0&muted=1&playsinline=1&title=0&byline=0&portrait=0`;
+        // celular: modo "background" (autoplay mudo, sem interface e sem a miniatura/poster do Vimeo, que tem outro enquadramento)
+        iframe.src = `https://player.vimeo.com/video/${v.id}?autopause=0&player_id=0&app_id=58479&controls=0&muted=1&playsinline=1&title=0&byline=0&portrait=0${k === 'mobile' ? '&background=1' : ''}`;
         iframe.title = v.title;
         iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share';
         iframe.referrerPolicy = 'strict-origin-when-cross-origin';
@@ -3944,6 +3980,37 @@
         wrap.appendChild(iframe);
 
         const p = player = new Vimeo.Player(iframe);
+
+        if (k === 'mobile') {
+          // O vídeo nunca deve ficar tocando: o scroll é quem manda. Qualquer "play" (ex.: o autoplay do modo
+          // background, que pode chegar depois do nosso pause) é pausado na hora.
+          let started = false;
+          p.on('play', () => { started = true; p.pause().catch(() => { }); });
+          p.ready()
+            .then(() => p.getDuration().then(d => { duration = d; }))
+            // espera o autoplay mudo iniciar (carrega e decodifica os quadros); se o aparelho bloquear, força um play
+            .then(() => new Promise(r => {
+              const t0 = performance.now();
+              const wait = () => {
+                if (started || performance.now() - t0 > 900) r();
+                else setTimeout(wait, 50);
+              };
+              wait();
+            }))
+            .then(() => started ? 0 : p.play().catch(() => { }))
+            .then(() => p.pause().catch(() => { }))
+            // volta ao quadro 0 e dá um respiro para ele ser pintado antes de aparecer (evita mostrar outro quadro)
+            .then(() => p.setCurrentTime(0).catch(() => { }))
+            .then(() => new Promise(r => setTimeout(r, 300)))
+            .catch(() => { })
+            .then(() => {
+              if (p !== player) return;
+              ready = true;
+              reveal();
+            });
+          return;
+        }
+
         p.ready()
           .then(() => p.getDuration().then(d => { duration = d; }))
           // "aquece" o vídeo: toca e pausa no frame 0 para o Vimeo carregar os frames
