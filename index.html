@@ -3136,9 +3136,9 @@
         height: 100svh
       }
 
-      /* sem texto sobre o vídeo: escurece só o topo (cabeçalho) e dissolve a base no fundo da próxima dobra */
+      /* topo escurecido (cabeçalho + H1) e base dissolvida no fundo, onde ficam os selos; o meio com as pessoas fica limpo */
       .shade {
-        background: linear-gradient(to bottom, rgba(3, 3, 3, .6) 0%, rgba(3, 3, 3, 0) 22%, rgba(3, 3, 3, 0) 72%, var(--bg) 100%)
+        background: linear-gradient(to bottom, rgba(3, 3, 3, .78) 0%, rgba(3, 3, 3, .5) 22%, rgba(3, 3, 3, 0) 38%, rgba(3, 3, 3, 0) 66%, rgba(3, 3, 3, .85) 90%, var(--bg) 100%)
       }
 
       /* badge, H1, texto, botão, selos e painéis começam logo abaixo da 1ª tela */
@@ -3146,7 +3146,89 @@
         margin-top: 100vh;
         margin-top: 100svh;
         padding-top: 104px; /* 80px do cabeçalho fixo + folga: ao rolar 1 tela, o badge aparece logo abaixo dele */
-        padding-bottom: 72px
+        padding-bottom: 72px;
+        display: flex;
+        flex-direction: column;
+        gap: 0
+      }
+
+      /* os filhos do bloco de texto passam a ser itens diretos de .hg, para H1 e selos irem à 1ª dobra */
+      .hero .hg>div:first-child {
+        display: contents
+      }
+
+      .hero .hg .badge {
+        align-self: flex-start;
+        margin-bottom: 22px
+      }
+
+      /* H1 no topo da 1ª dobra: 24px abaixo do cabeçalho fixo (80px), sobre o vídeo e acima das pessoas */
+      .hero .hg h1 {
+        position: absolute;
+        z-index: 2;
+        left: 24px;
+        right: 24px;
+        top: calc(104px - 100vh);
+        top: calc(104px - 100svh);
+        margin: 0;
+        font-size: clamp(28px, min(9vw, 4.6vh), 36px); /* encolhe um pouco em telas baixas para não encostar nas pessoas */
+        font-size: clamp(28px, min(9vw, 4.6svh), 36px);
+        filter: drop-shadow(0 2px 14px rgba(0, 0, 0, .7)) /* drop-shadow (e não text-shadow) para não escurecer o degradê do "até 95%" */
+      }
+
+      .hero .hg .lead {
+        margin: 0 0 24px
+      }
+
+      /* selos de confiança: 4 lado a lado, na base da 1ª dobra (sobre o vídeo, abaixo das pessoas) */
+      .hero .hg .trust {
+        position: absolute;
+        z-index: 2;
+        left: 16px;
+        right: 16px;
+        top: -24px;
+        transform: translateY(-100%);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        row-gap: 0;
+        margin: 0;
+        padding: 0;
+        border-top: 0
+      }
+
+      .hero .hg .trust li {
+        padding: 0 6px;
+        gap: 3px;
+        border-left: 1px solid var(--bs)
+      }
+
+      .hero .hg .trust li:first-child {
+        border-left: 0
+      }
+
+      .hero .hg .trust b {
+        font-size: 15px;
+        gap: 5px
+      }
+
+      .hero .hg .trust b iconify-icon {
+        font-size: 14px
+      }
+
+      .hero .hg .trust li>span {
+        font-size: 8px;
+        letter-spacing: .04em;
+        line-height: 1.35;
+        overflow-wrap: anywhere
+      }
+
+      .hero .hg .trust .stars {
+        font-size: 9px;
+        letter-spacing: 1px
+      }
+
+      .hero .hg .hr {
+        margin-top: 44px
       }
     }
 
@@ -3737,24 +3819,28 @@
       // Roda mesmo com "reduzir movimento" ativo no sistema (contar números não é movimento brusco).
       const DURATION = 3800; // ms — aumente para ficar mais lento
       counters.forEach(el => show(el, 0));
-      const runCounters = () => {
-        meter.style.width = '89.7%';
+      const runCounters = (list, withMeter) => {
+        if (withMeter) meter.style.width = '89.7%';
         const t0 = performance.now();
         const tick = () => {
           const k = Math.min((performance.now() - t0) / DURATION, 1);
           const e = 1 - Math.pow(1 - k, 2); // ease-out suave
-          counters.forEach(el => show(el, parseFloat(el.dataset.to) * e));
+          list.forEach(el => show(el, parseFloat(el.dataset.to) * e));
           if (k < 1) requestAnimationFrame(tick);
         };
         tick();
       };
       if (matchMedia('(max-width: 640px)').matches) {
-        // smartphone: o conteúdo do hero fica na 2ª dobra — os números começam quando ele entra na tela
+        // smartphone: os selos (4.9, 25 anos, 100%) ficam na 1ª dobra e contam ao abrir;
+        // os painéis (fatura, 95%…) ficam na 2ª dobra e contam quando entram na tela
+        const trustList = counters.filter(el => el.closest('.trust'));
+        const panelList = counters.filter(el => !el.closest('.trust'));
+        setTimeout(() => runCounters(trustList, false), 900);
         new IntersectionObserver((es, o) => {
-          if (es.some(e => e.isIntersecting)) { o.disconnect(); setTimeout(runCounters, 250); }
-        }, { threshold: .25 }).observe(hero.querySelector('.hg'));
+          if (es.some(e => e.isIntersecting)) { o.disconnect(); setTimeout(() => runCounters(panelList, true), 250); }
+        }, { threshold: .25 }).observe(hero.querySelector('.hr'));
       } else {
-        setTimeout(runCounters, 900);
+        setTimeout(() => runCounters(counters, true), 900);
       }
     })();
 
